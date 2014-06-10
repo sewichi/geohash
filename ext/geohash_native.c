@@ -1,11 +1,11 @@
 // geohash-native.c
 // (c) 2008-2010 David Troy
 // davetroy@gmail.com
-// 
+//
 // (The MIT License)
-// 
+//
 // Copyright (c) 2008 David Troy, Roundhouse Technologies LLC
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
 // 'Software'), to deal in the Software without restriction, including
@@ -13,10 +13,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -37,12 +37,12 @@ static void decode_geohash_bbox(char *geohash, double *lat, double *lon) {
 	double lat_err, lon_err;
 	char c, cd, mask, is_even=1;
 	static char bits[] = {16,8,4,2,1};
-	
+
 	lat[0] = -90.0;  lat[1] = 90.0;
 	lon[0] = -180.0; lon[1] = 180.0;
 	lat_err = 90.0;  lon_err = 180.0;
 	hashlen = strlen(geohash);
-	
+
 	for (i=0; i<hashlen; i++) {
 		c = tolower(geohash[i]);
 		cd = strchr(BASE32, c)-BASE32;
@@ -77,7 +77,7 @@ static void encode_geohash(double latitude, double longitude, int precision, cha
 
 	lat[0] = -90.0;  lat[1] = 90.0;
 	lon[0] = -180.0; lon[1] = 180.0;
-	
+
 	while (i < precision) {
 		if (is_even) {
 			mid = (lon[0] + lon[1]) / 2;
@@ -94,7 +94,7 @@ static void encode_geohash(double latitude, double longitude, int precision, cha
 			} else
 				lat[1] = mid;
 		}
-		
+
 		is_even = !is_even;
 		if (bit < 4)
 			bit++;
@@ -112,9 +112,9 @@ static VALUE encode(VALUE self, VALUE lat, VALUE lon, VALUE precision)
 	VALUE geohash;
 	char str[15];
 	int digits=10;
-	
+
 	digits = NUM2INT(precision);
-	
+
 	Check_Type(lat, T_FLOAT);
 	Check_Type(lon, T_FLOAT);
 	if (digits <3 || digits > 12)
@@ -154,9 +154,9 @@ static VALUE decode(VALUE self, VALUE str)
 	VALUE ary;
 	double point[2];
 	Check_Type(str, T_STRING);
-	
+
 	decode_geohash(RSTRING_PTR(str), point);
-	
+
 	ary = rb_ary_new2(2);
 	rb_ary_store(ary, 0, rb_float_new(point[0]));
 	rb_ary_store(ary, 1, rb_float_new(point[1]));
@@ -173,7 +173,7 @@ void get_neighbor(char *str, int dir, int hashlen)
 														 	 "238967debc01fg45kmstqrwxuvhjyznp",
 														 	 "p0r21436x8zb9dcf5h7kjnmqesgutwvy",
 														   "14365h7k9dcfesgujnmqp0r2twvyx8zb" };
-												
+
 	static char *borders[] = { "bcfguvyz", "0145hjnp", "prxz", "028b" };
 
 	char last_chr, *border, *neighbor;
